@@ -10,7 +10,6 @@ class Resolvedor(object):
 	self.localhost =  socket.gethostname()
 	self.localIp = socket.gethostbyname(self.localhost)
         self.listaIp= []
-        print("Si tengo listaIp {0}".format(self.listaIp))
         self.num_reg= 0
 
     def guardalos(self, tipoP,nombreArch,version,archi):
@@ -20,10 +19,9 @@ class Resolvedor(object):
 	 print("Estoy en resolvedor {0}.".format(culo))
 
     def agregarServidor(self,ip):
-        
-        num_reg= num_reg +1
+        self.listaIp.append(ip)
+        self.num_reg= self.num_reg +1
         print("Se ha registrado el servidor: {0}".format(ip))
-        print("{0}".format(self.listaIp))
         
         
 def main():

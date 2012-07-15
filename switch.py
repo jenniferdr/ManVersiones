@@ -51,7 +51,7 @@ def main():
 	{
 	    switch: "example.switch"
 	},
-	host= '127.0.0.1',
+	host= '201.211.164.206',
 	port=int(portLocal),
 	ns=False)
     

@@ -2,8 +2,6 @@
 
 class Peticion(object):
 
-    
-
     def __init__(self, tipoP, nombreArch,version,archi):
 	self.tipoPeticion = tipoP
 	self.nombreArch = nombreArch
@@ -19,6 +17,6 @@ class Peticion(object):
 	
     def enviarCosas(self,resolv):
 	print("Estoy en peticion, {0} ".format(self.tipoPeticion))
-	resolv.guardalos(self.tipoPeticion,self.nombreArch,self.version)
+	resolv.guardalos(self.tipoPeticion,self.nombreArch,self.version,self.archi)
 	
     
