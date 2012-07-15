@@ -3,7 +3,72 @@ import Pyro4
 import peticion
 import sys
 import socket
+import atexit
+import threading
+import SocketServer
+from Tools import *
 
+
+
+#RESOLVEDOR CON SOCKETS MULTIHILOS
+
+#Handler del servidor
+class requestHandler(SocketServer.BaseRequestHandler):
+
+	#def __init__(self, reques, client_address, server)
+
+	def handle(self):
+		
+		data = self.request.recv(1024) #Lee la informacion sel socket a la variable 'data'
+		if data == 'REGISTRO':		
+			#Caso de registro de nuevo servidor
+			self.request.sendall('ACK')#Envia ack
+			data = self.request.recv(1024).split('$')#lee datos del socket
+			self.request.sendall('ACK')#envia ack
+			self.server.servers[data[0]] = (data[1],data[2])#incluye los datos del servidor
+			if data[0] not in self.server.groups['0']:#Evita duplicados en el diccionario de servidores
+				self.server.groups['0'].append(data[0])
+			#print("Se registro correctamente el servidor {0} con los datos {1}".format(data[0],self.server.servers[data[0]]))
+			#print(self.server.groups['0'])
+		elif data == 'MULTICAST':
+			#Se envia un multicast
+			#print('LLEGO UN MULTICAST AL RESOLVEDOR')
+			self.request.sendall('ACK')#Envia ack
+			grupo = self.request.recv(1024)#obtiene el grupo al que esta dirigido
+			#print('LLego para el grupo {0}'.format(grupo))
+			self.request.sendall('ACK')#manda ack
+			buffsize = self.request.recv(1024)#obtiene el tamano del mensaje
+			#print('LLego con un mensaje de buffsize {0}'.format(buffsize))
+			self.request.sendall('ACK')#manda ack
+			mensaje = self.request.recv(int(buffsize))#lee mensaje de socket
+			#print('LLego con el mensaje {0}'.format(mensaje))
+			self.request.sendall('ACK')#manda ack
+			#manda los mensajes
+			for server in self.server.groups[grupo]:
+				info = self.server.servers[server]
+				print(info)
+				MensajeAServidor(info[0],info[1],mensaje)
+		else:
+			print('')
+
+#Implementacion de servidor multihilo
+class Server(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
+	def __init__(self, server_address, RequestHandlerClass):
+		SocketServer.TCPServer.__init__(self, server_address, RequestHandlerClass)
+		self.servers = {}
+		self.groups = {'0':[]}
+		self.sockets = []
+		
+		
+
+
+
+def close_sockets(server):
+	server.shutdown
+
+
+#VERSION RESOLVEDOR PYRO
+	
 class Resolvedor(object):
         
     def __init__(self):
@@ -28,19 +93,22 @@ class Resolvedor(object):
         
 def main():
 
-    if(len(sys.argv)!=3):
-        print("Sintaxis incorrecta: <numero_maquinas> <numero_tolerancia>")
+    if(len(sys.argv)!=4):
+        print("Sintaxis incorrecta: <numero_maquinas> <numero_tolerancia> <puerto>")
         exit()
 
-    numMaq= sys.argv[1]
+        
+    #-------------version Pyro
+    #numMaq= sys.argv[1]
     # Habra que replicar los archivos k+1 veces
-    k= sys.argv[2]
+    #k= sys.argv[2]
 
-    resolvedor=Resolvedor()
+    #resolvedor=Resolvedor()
     #print("this is {0} y el ip es {1}".format(resolvedor.localhost,
 #					      resolvedor.localIp))
 
 
+    """
     Pyro4.Daemon.serveSimple(
 	{
 	    resolvedor: "example.resolvedor"
@@ -54,6 +122,38 @@ def main():
         a=1
 
     print("El registro de las maquinas se ha completado")
+    """
+    
+    #----------Version Sockets
+    
+    serv = Server(('',int(sys.argv[3])),requestHandler)
+    s_thread = threading.Thread(target=serv.serve_forever)
+    s_thread.demon = True
+    s_thread.start()
+    my_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #Se instancia el socket para recibir conexiones
+    atexit.register(close_sockets,serv)
+    while 1:
+    	a = 1
+    atexit.register(close_sockets,serv)
+    serv.shutdown()
+    
     
 if __name__=="__main__":
     main()
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

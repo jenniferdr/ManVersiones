@@ -2,6 +2,8 @@ from __future__ import print_function
 import Pyro4
 import peticion
 import sys
+import time
+from Tools import *
 
 class Switch(object):
     
@@ -28,6 +30,14 @@ class Switch(object):
 	    print("Debo hacer update")
 	else:
 	    print("Ni idea de que quieres: {0}".format(self.tipoP))
+	    
+    def elegir_coordinador(self,ip_resolvedor,puerto_resolvedor):
+		multicast(ip_resolvedor,puerto_resolvedor,"ELECCION","0")
+		#multicast(ip_resolvedor,puerto_resolvedor,"ELECCION","0")
+		#multicast(ip_resolvedor,puerto_resolvedor,"ELECCION","0")
+		#multicast(ip_resolvedor,puerto_resolvedor,"ELECCION","0")
+		#time.sleep(7)
+		#multicast(ip_resolvedor,puerto_resolvedor,"COORDINADOR","0")
 
 		 
 def main():
@@ -35,6 +45,9 @@ def main():
 	print ("Sintaxis incorrecta: switch <dirIP_Resolvedor> <puerto_Resolvedor> <puerto_Switch>")
 	exit()
 
+	
+	
+	
     resolvedorAddr = sys.argv[1]
     resolvedorPort = sys.argv[2]
     portLocal = sys.argv[3]
@@ -58,4 +71,27 @@ def main():
 if __name__=="__main__":
     main()
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
