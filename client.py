@@ -11,10 +11,22 @@ if(len(sys.argv) < 3 or len(sys.argv) >4):
 
 elif(len(sys.argv) == 3):
     if(sys.argv[1]=="commit"):
-	tipoP = sys.argv[1]
-	archivo = sys.argv[2]
+		tipoP = sys.argv[1]
+		archivo = sys.argv[2]
+		try:
+	
+				f = open(archivo)
+				lectura = f.read()    
+				switch=Pyro4.Proxy('PYRO:example.switch@201.211.164.206:8080')
+
+				pet1 = Peticion(tipoP,archivo,version,lectura)
+				pet1.enviarRequest(switch)
+	
+		except IOError:
+			print 'No existe', archivo
+			
 	# guardar los otros parametros
-	print ("commit 3")
+			#	print ("commit 3")
     elif(sys.argv[1]=="checkout"):
 	tipoP = sys.argv[1]
 	archivo = sys.argv[2]
@@ -41,14 +53,13 @@ elif(len(sys.argv)==4):
 	exit()
 	
 sys.excepthook=Pyro4.util.excepthook
-    
-switch=Pyro4.Proxy('PYRO:example.switch@127.0.01:8080')
-pet1 = Peticion(tipoP,archivo,version)
-pet1.enviarRequest(switch);
 
-    
+def error(a,o):
+	if (o==0):
+		print ("Debe dar el path completo del archivo {0} | Debe existir").format(a)
+	
  
-
+			
     
 	
 	
