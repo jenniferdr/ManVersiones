@@ -1,5 +1,8 @@
+import Pyro4.util
+import Pyro4
 import socket
 import sys
+from switch import *
 
 #(str,str,str,str) envia el mensaje al grupo simulando multicast
 def multicast(ip_resolvedor,port_resolvedor,mensaje,grupo):
@@ -54,5 +57,9 @@ def MensajeAServidor(ip_destino,port_destino,mensaje):
 	print('SI TERMINO LA FUNCION MensajeServidor')
 	
 	
+def EligeCoordinador(switch_ip,switch_port,ip_resolvedor,port_resolvedor):
+	switch=Pyro4.Proxy('PYRO:example.switch@{0}:{1}'.format(switch_ip,switch_port))
+	switch.elegir_coordinador(ip_resolvedor,port_resolvedor)
 
-
+#def EligeCoordinador2(switch,ip_resolvedor,port_resolvedor):
+#	switch.elegir_coordinador(ip_resolvedor,port_resolvedor)
