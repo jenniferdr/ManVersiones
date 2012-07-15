@@ -17,6 +17,7 @@ switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':5000')
     
 if(len(sys.argv) == 4):
     if(sys.argv[1]=="commit"):
+<<<<<<< HEAD
       try:
          f = open(archivo)
          lectura = f.read()    
