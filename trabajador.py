@@ -3,7 +3,6 @@ import Pyro4
 import sys
 import socket
 from peticion import Peticion
-<<<<<<< HEAD
 import socket
 import fcntl
 import struct

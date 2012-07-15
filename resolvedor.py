@@ -83,12 +83,15 @@ class Resolvedor(object):
 	 
 	 print ('holas {0} '.format(t))
 	 print("Estoy en resolvedor {0}.".format(culo))
-
+	
     def agregarServidor(self,ip):
         self.listaIp.append(ip)
         self.num_reg= self.num_reg +1
         print("Se ha registrado el servidor: {0}".format(ip))
-        
+    
+    
+    def conectado(self):
+		print('honf')
         
 def main():
 
@@ -107,7 +110,7 @@ def main():
 #					      resolvedor.localIp))
 
 
-    """
+    
     Pyro4.Daemon.serveSimple(
 	{
 	    resolvedor: "example.resolvedor"
@@ -117,15 +120,14 @@ def main():
 	ns=False)
 
     print(" Esperando registro inicial de todos los servidores")
-    while(resolvedor.num_reg< numMaq):
-        a=1
+    #while(resolvedor.num_reg< numMaq):
+     #   a=1
 
-    print("El registro de las maquinas se ha completado")
-    """
-    
+    #print("El registro de las maquinas se ha completado")
+        
     #----------Version Sockets
     
-    serv = Server(('',int(sys.argv[3])),requestHandler)
+    '''serv = Server(('',int(sys.argv[3])),requestHandler)
     s_thread = threading.Thread(target=serv.serve_forever)
     s_thread.demon = True
     s_thread.start()
@@ -135,7 +137,7 @@ def main():
     	a = 1
     atexit.register(close_sockets,serv)
     serv.shutdown()
-    
+    '''
     
 if __name__=="__main__":
     main()

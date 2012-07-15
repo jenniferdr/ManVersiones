@@ -19,7 +19,17 @@ class Switch(object):
 	self.archivo=archivo
 	self.version=version
 	self.archi= archi
+	resolvedor=Pyro4.Proxy('PYRO:example.resolvedor@127.0.0.1:6000')
+	resolvedor.conectado(archivo)
+	#sys.excepthook=Pyro4.util.excepthook
 
+#resolvedor=Pyro4.Proxy('PYRO:example.resolvedor@127.0.0.1:39437')
+#pet1 = Peticion("Estupido","arch.txt",1,"Contenido")
+#pet1.enviarCosas(resolvedor)
+#ip= get_ip_address('eth0')
+#resolvedor.agregarServidor(ip)
+
+	
 	print("Request: {0} {1} {2} {3}".format(self.tipoP,self.archivo,self.version, self.archi))
 
 	if(self.tipoP == "commit"):
@@ -45,9 +55,7 @@ def main():
 	print ("Sintaxis incorrecta: switch <dirIP_Resolvedor> <puerto_Resolvedor> <puerto_Switch>")
 	exit()
 
-	
-	
-	
+
     resolvedorAddr = sys.argv[1]
     resolvedorPort = sys.argv[2]
     portLocal = sys.argv[3]
@@ -64,7 +72,7 @@ def main():
 	{
 	    switch: "example.switch"
 	},
-	host= '201.211.164.206',
+	host= '127.0.0.1',
 	port=int(portLocal),
 	ns=False)
     
