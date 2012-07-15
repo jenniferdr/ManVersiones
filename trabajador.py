@@ -3,13 +3,19 @@ import Pyro4
 import sys
 import socket
 from peticion import Peticion
+import fcntl
+import struct
 from Tools import *
 
-#sys.excepthook=Pyro4.util.excepthook
-#resolvedor=Pyro4.Proxy('PYRO:example.resolvedor@127.0.0.1:39437')
-#pet1 = Peticion("Estupido","arch.txt",1)
-#pet1.enviarCosas(resolvedor);
-
+# funcion para encontrar el ip de mi maquina
+# 
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 
 def main():
@@ -66,5 +72,13 @@ def main():
    	
 if __name__=="__main__":
     main()
+
+
+#sys.excepthook=Pyro4.util.excepthook
+#resolvedor=Pyro4.Proxy('PYRO:example.resolvedor@127.0.0.1:39437')
+#pet1 = Peticion("Estupido","arch.txt",1,"Contenido")
+#pet1.enviarCosas(resolvedor)
+#ip= get_ip_address('eth0')
+#resolvedor.agregarServidor(ip)
 
 
