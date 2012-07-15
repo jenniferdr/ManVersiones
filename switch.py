@@ -23,7 +23,7 @@ class Switch(object):
 	if(self.tipoP == "commit"):
 	    print("Debo hacer commit")
 	elif(self.tipoP == "checkout"):
-	    print("Debo hacer update")
+	    print("Debo hacer checkout")
 	elif(self.tipoP == "update"):
 	    print("Debo hacer update")
 	else:
