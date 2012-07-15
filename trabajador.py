@@ -14,8 +14,8 @@ from Tools import *
 
 def main():
 
-	if (len(sys.argv)!= 6):
-		print ("Sintaxis incorrecta: trabajador <id> <puerto> <resolvedor_address> <resolvedor_puerto> <ip_mia(cableado)>")
+	if (len(sys.argv)!= 8):
+		print ("Sintaxis incorrecta: trabajador <id> <puerto> <resolvedor_address> <resolvedor_puerto> <ip_mia(cableado)> <ip_switch> <puerto_switch>")
 		exit()
 	"""
 	yo = trabajador(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
@@ -23,7 +23,7 @@ def main():
 	
 
 	soyCoordinador = False
-	switch=Pyro4.Proxy('PYRO:example.switch@127.0.01:8080')
+	switch=Pyro4.Proxy('PYRO:example.switch@{0}:{1}'.format(sys.argv[6],sys.argv[7]))
 
 	# ------ Primer Reporte ante el resolvedor
 	socket_resolvedor = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #Se Instancia un socket
@@ -55,7 +55,7 @@ def main():
 			idd = data.split('$')[1]
 			if idd != sys.argv[1] and int(idd) > int(sys.argv[1]):
 				soyCoordinador = False
-				#print('ya no creo que sea coordinador')
+				print('ya no creo que sea coordinador')
 		elif data == 'COORDINADOR':
 			if soyCoordinador:
 				switch.avisar(sys.argv[1],sys.argv[3],sys.argv[4])

@@ -17,7 +17,7 @@ elif(len(sys.argv) == 3):
 	
 				f = open(archivo)
 				lectura = f.read()    
-				switch=Pyro4.Proxy('PYRO:example.switch@201.211.164.206:8080')
+				switch=Pyro4.Proxy('PYRO:example.switch@127.0.0.1:8080')
 
 				pet1 = Peticion(tipoP,archivo,version,lectura)
 				pet1.enviarRequest(switch)
