@@ -10,8 +10,10 @@ class Resolvedor(object):
 	self.localhost =  socket.gethostname()
 	self.localIp = socket.gethostbyname(self.localhost)
 
-    def guardalos(self, tipoP,nombreArch,version):
+    def guardalos(self, tipoP,nombreArch,version,archi):
 	 culo = tipoP
+	 t=archi
+	 print ('holas {0} '.format(t))
 	 print("Estoy en resolvedor {0}.".format(culo))
 
    # def imprimeAtt(self):

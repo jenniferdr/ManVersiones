@@ -12,12 +12,13 @@ class Switch(object):
 	self.archivo=""
 	self.version=""
 	
-    def guardalo(self,tipoP,archivo,version):
+    def guardalo(self,tipoP,archivo,version,archi):
 	self.tipoP= tipoP
 	self.archivo=archivo
 	self.version=version
+	self.archi= archi
 
-	print("Request: {0} {1} {2}".format(self.tipoP,self.archivo,self.version))
+	print("Request: {0} {1} {2} {3}".format(self.tipoP,self.archivo,self.version, self.archi))
 
 	if(self.tipoP == "commit"):
 	    print("Debo hacer commit")
