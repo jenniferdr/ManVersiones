@@ -14,13 +14,23 @@ class Resolvedor(object):
 	 culo = tipoP
 	 print("Estoy en resolvedor {0}.".format(culo))
 
+   # def imprimeAtt(self):
+        
+
 def main():
-    print("Esto es una prueba")
+
+    if(len(sys.argv)!=3):
+        print("Sintaxis incorrecta: <numero_maquinas> <numero_tolerancia>")
+        exit()
+
+    numMaq= sys.argv[1]
+    # Habra que replicar los archivos k+1 veces
+    k= sys.argv[2]
+
     resolvedor=Resolvedor()
     print("this is {0} y el ip es {1}".format(resolvedor.localhost,
 					      resolvedor.localIp))
 
-    resolvedor = Resolvedor()
     Pyro4.Daemon.serveSimple(
 	{
 	    resolvedor: "example.resolvedor"
