@@ -13,6 +13,7 @@ class Resolvedor(object):
     def guardalos(self, tipoP,nombreArch,version,archi):
 	 culo = tipoP
 	 t=archi
+	 
 	 print ('holas {0} '.format(t))
 	 print("Estoy en resolvedor {0}.".format(culo))
 
