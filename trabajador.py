@@ -93,6 +93,7 @@ def main():
 			#my_file = open('pruebas/{0}'.format(nombre),'wb')
 			#my_file.write(data)
 			#my_file.close()
+
 			versionMayor=0
 			menores=[]
 			for ip in table.keys():
@@ -109,17 +110,31 @@ def main():
 						if tupla[0]== nombre:
 							if tupla[1]> versionMayor:
 								versionMayor= tupla[1]
-			pickle.dump(menores , open("listaIp", "wb",2))
+			#pickle.dump(menores , open("listaIp", "wb",2))
 			# enviar menores
 			# enviar archivo multicast data nombre archivo y version +1
 			# recibir el AKC del resolverdor si todo salio bien 
 			for ip in menores:
 				table[ip].append((nombre, versionMayor+1))
 					
-					
-			pickle.dump( table, open( "tablaGenral", "wb",2 ) )		
+			print(data)	
+			#pickle.dump( table, open( "tablaGenral", "wb",2 ) )
+			multicast(sys.argv[3],sys.argv[4],data,'0','MU/{0}/{1}'.format(nombre,'2'))
+
 			### ENVIAR EL ARCHIVO A TODOS
 			#TablaEnvio = pickle.load( open( "tablaGenral", "rb",2 ) )
+		elif 'U/' in data:
+			print(data)
+			nombre = '{0}.{1}'.format(data.split('/')[1],sys.argv[1])
+			version = data.split('/')[2]
+			print(version)	
+			buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
+			connection_socket.sendall('ACK') #Envia un Ack
+			data = connection_socket.recv(buffsize) #Lee la informacion
+			connection_socket.sendall('ACK') #Envia un acki
+			my_file = open('pruebas/{0}'.format(nombre),'wb')
+			my_file.write(data)
+			my_file.close()
 		elif data == 'UPDATE' or data=='CHECKOUT':
 			if version>0:
 				for ip in tabla.keys():
@@ -137,23 +152,23 @@ def main():
 				# enviar grupo 
 				# enviar al grupo "ip" nombre + version		
 	
-	# si es Checkout
-	# busco en la tabla el archivo el archivo con la version mayor  y se lo mando a Switch-cliente
-	# si el primero no me responde , el siguiente y lo marco como muerto 
+		 # si es Checkout
+		 # busco en la tabla el archivo el archivo con la version mayor  y se lo mando a Switch-cliente
+		 # si el primero no me responde , el siguiente y lo marco como muerto 
 
-	# si no soy coordinador 
+		# si no soy coordinador 
 	
-	# si es commit guardo el archivo
-	# si es update o checkout mando el archivo
+		# si es commit guardo el archivo
+		# si es update o checkout mando el archivo
 			
 
 		connection_socket.close()
 	my_socket.close()
 
 
+
 if __name__=="__main__":
    main()
-
 
 
 
