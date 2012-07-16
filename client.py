@@ -21,7 +21,7 @@ if(len(sys.argv) == 4):
       try:
          f = open(archivo)
          lectura = f.read()    
-         pet1 = Peticion(tipoP,archivo,'1',lectura)
+         pet1 = Peticion(tipoP,archivo,0,lectura)
          pet1.enviarRequest(switch)
       except IOError:
          print 'No existe', archivo
@@ -36,9 +36,18 @@ if(len(sys.argv) == 4):
 	
 elif(len(sys.argv)==5):
     if(sys.argv[1]=="update"):
-         version = sys.argv[4]
-         pet1 = Peticion(tipoP,archivo,version,'')
-         pet1.enviarRequest(switch)
+        try: 
+            version = int(sys.argv[4])
+        except:
+            print  "la version debe ser un entero"
+            exit()
+
+        if version<=0:
+             print("La version debe ser un numero mayor a 1")
+             exit()
+
+        pet1 = Peticion(tipoP,archivo,version,'')
+        pet1.enviarRequest(switch)
     else:
 	     print("Sintaxis update: <update> <archivo> [version]")
 	     exit()
@@ -52,4 +61,3 @@ def error(a,o):
     
 	
 	
-
