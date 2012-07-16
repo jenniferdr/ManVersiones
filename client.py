@@ -17,11 +17,10 @@ switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':5000')
     
 if(len(sys.argv) == 4):
     if(sys.argv[1]=="commit"):
-<<<<<<< HEAD
       try:
          f = open(archivo)
          lectura = f.read()    
-         pet1 = Peticion(tipoP,archivo,1,lectura)
+         pet1 = Peticion(tipoP,archivo,'1',lectura)
          pet1.enviarRequest(switch)
       except IOError:
          print 'No existe', archivo
