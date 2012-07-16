@@ -44,9 +44,9 @@ elif(len(sys.argv)==5):
 	     exit()
 	
 def error(a,o):
-	if (o==0):
-		print ("Debe dar el path completo del archivo {0} | Debe existir").format(a)
-		exit()
+    if (o==0):
+      print ("Debe dar el path completo del archivo {0} | Debe existir").format(a)
+      exit()
  
 			
     
