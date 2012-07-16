@@ -87,7 +87,6 @@ def main():
 			if soyCoordinador:
 				switch.avisar((sys.argv[5],sys.argv[2]),sys.argv[3],sys.argv[4])
 		elif data == 'COMMIT':
-			"""
 			nombre = receiveData(my_socket)
 			data = receiveData(my_socket)
 			version = receiveData(my_socket)
@@ -107,16 +106,16 @@ def main():
 						if tupla[0]== nombre:
 							if tupla[1]> versionMayor:
 								versionMayor= tupla[1]
-			pickle.dump(menores , open("listaIp", "wb",2))
+			#pickle.dump(menores , open("listaIp", "wb",2))
 			# enviar menores
 			# enviar archivo multicast data nombre archivo y version +1
 			# recibir el AKC del resolverdor si todo salio bien 
 			for ip in menores:
 				table[ip].append((nombre, versionMayor+1))
 					
-			"""
-			pickle.dump( table, open( "tablaGenral", "wb",2 ) )
-			#multicast(sys.argv[3],sys.argv[4],data,'1','MU/{0}/{1}'.format(nombre,version))
+			print(data)	
+			#pickle.dump( table, open( "tablaGenral", "wb",2 ) )
+			multicast(sys.argv[3],sys.argv[4],data,'0','MU/{0}/{1}'.format(nombre,'2'))
 			### ENVIAR EL ARCHIVO A TODOS
 			#TablaEnvio = pickle.load( open( "tablaGenral", "rb",2 ) )
 		elif 'U/' in data:

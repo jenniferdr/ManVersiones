@@ -7,6 +7,7 @@ from switch import *
 
 #(str,str,str,str) envia el mensaje al grupo simulando multicast
 def multicast(ip_resolvedor,port_resolvedor,mensaje,grupo,tag = 'MULTICAST'):
+	print('COSA{0}'.format(tag))
 	buffsize = 2
 	while buffsize <  sys.getsizeof(mensaje):
 		buffsize *= buffsize
@@ -33,6 +34,7 @@ def multicast(ip_resolvedor,port_resolvedor,mensaje,grupo,tag = 'MULTICAST'):
 		print('AQUI SE ESPERABA UN ACK PERO TUVIMOS UN {0}'.format(b))
 		socket_resolvedor.sendall(mensaje) 
 	socket_resolvedor.close() #Se cierra el socket
+	print('COSO')
 
 
 def MensajeAServidor(ip_destino,port_destino,mensaje):

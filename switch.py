@@ -41,7 +41,7 @@ class Switch(object):
    def guardalo(self,tipoP,archivo,version,archi):
      self.tipoP= tipoP
      self.archivo=archivo
-     self.version=version
+     self.version=str(version)
      self.archi= archi
 
      print("Request: {0} {1} {2} {3}".format(self.tipoP,self.archivo,self.version, self.archi))

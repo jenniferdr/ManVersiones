@@ -20,6 +20,8 @@ class requestHandler(SocketServer.BaseRequestHandler):
    def handle(self):
 		
      data = self.request.recv(1024)#Lee la informacion sel socket a la variable 'data'
+     print('--------------------------------------------------')
+     print(data)
      if data == 'REGISTRO':		
         #Caso de registro de nuevo servidor
         self.request.sendall('ACK')#Envia ack
@@ -66,10 +68,13 @@ class requestHandler(SocketServer.BaseRequestHandler):
         #print('LLego con el mensaje {0}'.format(mensaje))
         self.request.sendall('ACK')#manda ack
         #manda los mensajes
-        for server in self.server.groups[grupo]:
-            info = self.server.servers[server]
+	self.server.groups[grupo]
+	for s in self.server.groups[grupo]:
+            info = self.server.servers[s]
             print(info)
             UploadAServidor(info[0],info[1],name,mensaje)
+	
+
      elif data == 'IP-REQUEST':
         print('CHEC')
         self.request.sendall('ACK')#Recibe Ack
