@@ -129,10 +129,11 @@ def main():
 			### ENVIAR EL ARCHIVO A TODOS
 			#TablaEnvio = pickle.load( open( "tablaGenral", "rb",2 ) )
 		elif 'U/' in data:
-			nombre = '{0}.{1}'.format(data.split('/')[1],sys.argv[1])
+			
 			version = data.split('/')[2]
 			if version == None:
 				Version = '0'	
+			nombre = '{0}.{1}'.format(data.split('/')[1],version)			
 			buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
 			connection_socket.sendall('ACK') #Envia un Ack
 			data = connection_socket.recv(buffsize) #Lee la informacion

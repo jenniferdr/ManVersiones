@@ -5,7 +5,7 @@ from peticion import Peticion
 
 print("# agumentos {0}.".format(len(sys.argv)))
 version = ""
-if(len(sys.argv) < 5 or len(sys.argv) >5):
+if(len(sys.argv) < 5 or len(sys.argv) >6):
     print("Sintaxis: client <accion> <archivo> <ipSwitch> <ipPort> [version-para update]")
     exit()
 
@@ -14,9 +14,9 @@ archivo = sys.argv[2]
 ip= sys.argv[3]
 
 sys.excepthook=Pyro4.util.excepthook
-switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':sys.argv[4]')
+switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':'+sys.argv[4])
 #switch.setTimeout(15)    
-if(len(sys.argv) == 4):
+if(len(sys.argv) == 5):
     if(sys.argv[1]=="commit"):
       try:
          f = open(archivo)
@@ -34,7 +34,7 @@ if(len(sys.argv) == 4):
 	print("Sintaxis:client <commit|checkout|update> <archivo> [version]")
 	exit()
 	
-elif(len(sys.argv)==5):
+elif(len(sys.argv)==6):
     if(sys.argv[1]=="update"):
         try: 
             version = int(sys.argv[4])
