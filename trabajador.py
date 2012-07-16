@@ -19,13 +19,13 @@ def get_ip_address(ifname):
 
 
 def receiveFile(my_socket):
-	for x in range(1,4):
-		connection_socket,addr = my_socket.accept() #Acepta la proxima conexion 
-		buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
-		connection_socket.sendall('ACK') #Envia un Ack
-		data = connection_socket.recv(buffsize) #Lee la informacion
-		connection_socket.sendall('ACK') #Envia un ack
-		print (data)
+    for x in range(1,4):
+       connection_socket,addr = my_socket.accept()  #Acepta la proxima conexion 
+       buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
+       connection_socket.sendall('ACK')             #Envia un Ack
+       data = connection_socket.recv(buffsize)      #Lee la informacion
+       connection_socket.sendall('ACK')             #Envia un ack
+       print(data)
 
 
 def main():
