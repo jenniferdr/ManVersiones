@@ -25,7 +25,7 @@ def receiveFile(my_socket):
 		connection_socket.sendall('ACK') #Envia un Ack
 		data = connection_socket.recv(buffsize) #Lee la informacion
 		connection_socket.sendall('ACK') #Envia un ack
-		print(data)
+		print (data)
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
 	"""
 	yo = trabajador(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
 	"""
-	
+	p
 
 	soyCoordinador = False
 	switch=Pyro4.Proxy('PYRO:example.switch@{0}:{1}'.format(sys.argv[6],sys.argv[7]))
@@ -61,12 +61,41 @@ def main():
 	my_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #Se instancia el socket para recibir conexiones
 	my_socket.bind(('',int(sys.argv[2]))) #Se liga a todas las interfaces disponibles y al puerto especificado
 	my_socket.listen(5) #Escucha por conexione en el socket
-	
-	#primera vez
-	# if soy coordinador
-	# Tengo la tabla de ips
-	# genero la tabla tabla= {'': [('','')]}
-	 
+	lista = Info_de_servers(sys.argv[3],sys.argv[4])
+		
+	while 1:
+		connection_socket,addr = my_socket.accept() #Acepta la proxima conexion 
+		buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
+		connection_socket.sendall('ACK') #Envia un Ack
+		data = connection_socket.recv(buffsize) #Lee la informacion
+		connection_socket.sendall('ACK') #Envia un ack
+		
+		print('LE LLEGO UN MENSAJE AL SERVIDOR {0} QUE DICE : {1}'.format(sys.argv[1],data))
+		if data == 'ELECCION':
+			soyCoordinador = True
+			multicast(sys.argv[3],sys.argv[4],'ID${0}'.format(sys.argv[1]),'0')
+		elif 'ID$' in data:
+			idd = data.split('$')[1]
+			if idd != sys.argv[1] and int(idd) > int(sys.argv[1]):
+				soyCoordinador = False
+				print('ya no creo que sea coordinador')
+		elif data == 'COORDINADOR':
+			if soyCoordinador:					
+				switch.avisar((sys.argv[5],sys.argv[2]),sys.argv[3],sys.argv[4])
+		elif data == 'COMMIT':
+			receiveFile(my_socket)
+			
+			connection_socket.close()
+	my_socket.close()
+
+	print("Esta levantado el servidor {0}".format(sys.argv[1]))
+   	
+if __name__=="__main__":
+    main()
+
+
+
+
 	 #luego 
 	 
 	# si es commit recorro la tabla y veo cual fue la ultima version del archivo y que servidores tienen menos carga
@@ -100,41 +129,12 @@ def main():
 	
 	# si es commit guardo el archivo
 	# si es update o checkout mando el archivo
-	
-	while 1:
-		connection_socket,addr = my_socket.accept() #Acepta la proxima conexion 
-		buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
-		connection_socket.sendall('ACK') #Envia un Ack
-		data = connection_socket.recv(buffsize) #Lee la informacion
-		connection_socket.sendall('ACK') #Envia un ack
-		
-		print('LE LLEGO UN MENSAJE AL SERVIDOR {0} QUE DICE : {1}'.format(sys.argv[1],data))
-		if data == 'ELECCION':
-			soyCoordinador = True
-			multicast(sys.argv[3],sys.argv[4],'ID${0}'.format(sys.argv[1]),'0')
-		elif 'ID$' in data:
-			idd = data.split('$')[1]
-			if idd != sys.argv[1] and int(idd) > int(sys.argv[1]):
-				soyCoordinador = False
-				print('ya no creo que sea coordinador')
-		elif data == 'COORDINADOR':
-			if soyCoordinador:
-				archivo= 'hola.txt'
-				version= '3'
-				accion = 'commit'
-#				if (accion == 'commit'):
-					
-				switch.avisar((sys.argv[5],sys.argv[2]),sys.argv[3],sys.argv[4])
-		elif data == 'COMMIT':
-			print 'hola'
-			receiveFile(my_socket)
-			connection_socket.close()
-	my_socket.close()
 
-	print("Esta levantado el servidor {0}".format(sys.argv[1]))
-   	
-if __name__=="__main__":
-    main()
+
+
+
+
+
 
 
 #sys.excepthook=Pyro4.util.excepthook
