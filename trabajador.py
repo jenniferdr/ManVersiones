@@ -128,13 +128,26 @@ def main():
 			nombre = receiveData(my_socket)
 			data = receiveData(my_socket)
 			version = receiveData(my_socket)
-			my_file = open('pruebas/{0}'.format(nombre),'wb')
-			my_file.write(data)
-			my_file.close()
+			#my_file = open('pruebas/{0}'.format(nombre),'wb')
+			#my_file.write(data)
+			#my_file.close()
 
 			#Seleccion de grupo
 
-			
+			multicast(sys.argv[3],sys.argv[4],data,'0','MU/{0}/{1}'.format(nombre,version))
+		elif 'U/' in data:
+			print(data)
+			nombre = '{0}.{1}'.format(data.split('/')[1],sys.argv[1])
+			version = data.split('/')[2]
+			print(version)	
+			buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
+			connection_socket.sendall('ACK') #Envia un Ack
+			data = connection_socket.recv(buffsize) #Lee la informacion
+			connection_socket.sendall('ACK') #Envia un acki
+			my_file = open('pruebas/{0}'.format(nombre),'wb')
+			my_file.write(data)
+			my_file.close()
+	
 
 			
 

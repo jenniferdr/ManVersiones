@@ -51,6 +51,25 @@ class requestHandler(SocketServer.BaseRequestHandler):
             info = self.server.servers[server]
             print(info)
             MensajeAServidor(info[0],info[1],mensaje)
+     elif 'MU/' in data:
+	name = '{0}/{1}'.format(data.split('/')[1],data.split('/')[2])
+	#Se envia un multicast
+        #print('LLEGO UN MULTICAST AL RESOLVEDOR')
+        self.request.sendall('ACK')#Envia ack
+        grupo = self.request.recv(1024)#obtiene el grupo al que esta dirigido
+        #print('LLego para el grupo {0}'.format(grupo))
+        self.request.sendall('ACK')#manda ack
+        buffsize = self.request.recv(1024)#obtiene el tamano del mensaje
+        #print('LLego con un mensaje de buffsize {0}'.format(buffsize))
+        self.request.sendall('ACK')#manda ack
+        mensaje = self.request.recv(int(buffsize))#lee mensaje de socket
+        #print('LLego con el mensaje {0}'.format(mensaje))
+        self.request.sendall('ACK')#manda ack
+        #manda los mensajes
+        for server in self.server.groups[grupo]:
+            info = self.server.servers[server]
+            print(info)
+            UploadAServidor(info[0],info[1],name,mensaje)
      elif data == 'IP-REQUEST':
         print('CHEC')
         self.request.sendall('ACK')#Recibe Ack
@@ -58,11 +77,8 @@ class requestHandler(SocketServer.BaseRequestHandler):
         for id in self.server.servers:
             self.request.sendall(self.server.servers[id][0])
             self.request.recv(1024)#Recibe Ack
-            print (self.server.servers[id][1])
-            self.request.sendall(self.server.servers[id][1])
-            self.request.recv(1024)#Recibe Ack
-            self.request.sendall('END')
-            self.request.recv(1024)#Recibe Ack
+        self.request.sendall('END')
+        self.request.recv(1024)#Recibe Ack
 
      else:
          print('')
