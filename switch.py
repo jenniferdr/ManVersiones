@@ -32,6 +32,7 @@ class Switch(object):
 	def avisar(self,id,res_add,res_port):
 		if not self.gotCoordinator:
 			self.gorCoordinator = True
+			self.coordinador= id
 			#SE ENTERA AQUI DE QUIEN ES EL COORDINADOR, CON EL PARAMETRO id
 			print('Felicitacion a {0} por ser el nuevo coordinador'.format(id))
 		else:

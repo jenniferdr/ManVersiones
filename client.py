@@ -12,12 +12,12 @@ if(len(sys.argv) < 4 or len(sys.argv) >5):
 tipoP = sys.argv[1]
 archivo = sys.argv[2]
 ip= sys.argv[3]
+
 sys.excepthook=Pyro4.util.excepthook
 switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':5000')
-    
+#switch.setTimeout(15)    
 if(len(sys.argv) == 4):
     if(sys.argv[1]=="commit"):
-<<<<<<< HEAD
       try:
          f = open(archivo)
          lectura = f.read()    

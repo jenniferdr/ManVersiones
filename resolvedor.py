@@ -21,6 +21,7 @@ class requestHandler(SocketServer.BaseRequestHandler):
 		
 		data = self.request.recv(1024) #Lee la informacion sel socket a la variable 'data'
 		if data == 'REGISTRO':		
+			# if el numero de registros es igual al numero de entrada me salgo
 			#Caso de registro de nuevo servidor
 			self.request.sendall('ACK')#Envia ack
 			data = self.request.recv(1024).split('$')#lee datos del socket
@@ -28,8 +29,8 @@ class requestHandler(SocketServer.BaseRequestHandler):
 			self.server.servers[data[0]] = (data[1],data[2])#incluye los datos del servidor
 			if data[0] not in self.server.groups['0']:#Evita duplicados en el diccionario de servidores
 				self.server.groups['0'].append(data[0])
-			#print("Se registro correctamente el servidor {0} con los datos {1}".format(data[0],self.server.servers[data[0]]))
-			#print(self.server.groups['0'])
+			print("Se registro correctamente el servidor {0} con los datos {1}".format(data[0],self.server.servers[data[0]]))
+			print(self.server.groups['0'])
 		elif data == 'MULTICAST':
 			#Se envia un multicast
 			#print('LLEGO UN MULTICAST AL RESOLVEDOR')
@@ -89,10 +90,7 @@ class Resolvedor(object):
         self.num_reg= self.num_reg +1
         print("Se ha registrado el servidor: {0}".format(ip))
     
-    
-    def conectado(self):
-		print('honf')
-        
+            
 def main():
 
     if(len(sys.argv)!=4):
@@ -111,15 +109,15 @@ def main():
 
 
     
-    Pyro4.Daemon.serveSimple(
-	{
-	    resolvedor: "example.resolvedor"
-            },
-	host = '127.0.0.1',
-	port = 39437,
-	ns=False)
+    #Pyro4.Daemon.serveSimple(
+	#{
+	 #   resolvedor: "example.resolvedor"
+      #      },
+	#host = '127.0.0.1',
+	#port = 39437,
+	#ns=False)
 
-    print(" Esperando registro inicial de todos los servidores")
+    #print(" Esperando registro inicial de todos los servidores")
     #while(resolvedor.num_reg< numMaq):
      #   a=1
 
@@ -127,7 +125,7 @@ def main():
         
     #----------Version Sockets
     
-    '''serv = Server(('',int(sys.argv[3])),requestHandler)
+    serv = Server(('',int(sys.argv[3])),requestHandler)
     s_thread = threading.Thread(target=serv.serve_forever)
     s_thread.demon = True
     s_thread.start()
@@ -137,7 +135,7 @@ def main():
     	a = 1
     atexit.register(close_sockets,serv)
     serv.shutdown()
-    '''
+    
     
 if __name__=="__main__":
     main()
