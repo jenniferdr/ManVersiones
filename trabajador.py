@@ -101,15 +101,15 @@ def main():
 				if len(menores)<k:
 					menores.append(ip)
 				else:
-				for ipstent in menores:
-					if len(table[ip])< len(table[iptent]):
-						menores.remove(iptent)
-						menores.append(ip)
-						break
-				for tupla in tabla[ip]:
-					if tupla[0]== nombre:
-						if tupla[1]> versionMayor:
-							versionMayor= tupla[1]
+					for ipstent in menores:
+						if len(table[ip])< len(table[iptent]):
+							menores.remove(iptent)
+							menores.append(ip)
+							break
+					for tupla in tabla[ip]:
+						if tupla[0]== nombre:
+							if tupla[1]> versionMayor:
+								versionMayor= tupla[1]
 			pickle.dump(menores , open("listaIp", "wb",2))
 			# enviar menores
 			# enviar archivo multicast data nombre archivo y version +1
@@ -125,10 +125,11 @@ def main():
 			if version>0:
 				for ip in tabla.keys():
 					for tupla in tabla[ip]:
-						if (tupla[0]= nombre and tupla[1]==version):
+						if (tupla[0]== nombre and tupla[1]==version):
+							print'enviar'
 							# enviar al grupo => "ip" nombre + version			
-			elif :
-				for ip in table.keys():
+			else:
+			    for ip in table.keys():
 					for tupla in tabla[ip]:
 						if tupla[0]== nombre:
 							if tupla[1]> versionMayor:
