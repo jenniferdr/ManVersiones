@@ -32,7 +32,7 @@ class requestHandler(SocketServer.BaseRequestHandler):
            self.server.groups['0'].append(data[0])
            #print("Se registro correctamente el servidor {0}
            #con los datos {1}".format(data[0],self.server.servers[data[0]]))
-			#print(self.server.groups['0'])
+		   #print(self.server.groups['0'])
      elif data == 'MULTICAST':
         #Se envia un multicast
         #print('LLEGO UN MULTICAST AL RESOLVEDOR')
@@ -58,6 +58,7 @@ class requestHandler(SocketServer.BaseRequestHandler):
         for id in self.server.servers:
             self.request.sendall(self.server.servers[id][0])
             self.request.recv(1024)#Recibe Ack
+            print (self.server.servers[id][1])
             self.request.sendall(self.server.servers[id][1])
             self.request.recv(1024)#Recibe Ack
             self.request.sendall('END')
@@ -74,9 +75,6 @@ class Server(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 		self.groups = {'0':[]}
 		self.sockets = []
 		
-		
-
-
 
 def close_sockets(server):
 	server.shutdown
@@ -144,7 +142,8 @@ def main():
     s_thread = threading.Thread(target=serv.serve_forever)
     s_thread.demon = True
     s_thread.start()
-    my_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #Se instancia el socket para recibir conexiones
+    #Se instancia el socket para recibir conexiones
+    my_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
     atexit.register(close_sockets,serv)
     while 1:
     	a = 1
