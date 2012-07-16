@@ -18,14 +18,13 @@ def get_ip_address(ifname):
     )[20:24])
 
 
-def receiveFile(my_socket):
-    for x in range(1,4):
+def receiveData(my_socket):
        connection_socket,addr = my_socket.accept()  #Acepta la proxima conexion 
        buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
        connection_socket.sendall('ACK')             #Envia un Ack
        data = connection_socket.recv(buffsize)      #Lee la informacion
        connection_socket.sendall('ACK')             #Envia un ack
-       print(data)
+       return(data)
 
 
 def main():
@@ -126,9 +125,20 @@ def main():
 					
 				switch.avisar((sys.argv[5],sys.argv[2]),sys.argv[3],sys.argv[4])
 		elif data == 'COMMIT':
-			print 'hola'
-			receiveFile(my_socket)
-			connection_socket.close()
+			nombre = receiveData(my_socket)
+			data = receiveData(my_socket)
+			version = receiveData(my_socket)
+			my_file = open('pruebas/{0}'.format(nombre),'wb')
+			my_file.write(data)
+			my_file.close()
+
+			#Seleccion de grupo
+
+			
+
+			
+
+		connection_socket.close()
 	my_socket.close()
 
 	print("Esta levantado el servidor {0}".format(sys.argv[1]))
