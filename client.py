@@ -17,7 +17,6 @@ switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':5000')
     
 if(len(sys.argv) == 4):
     if(sys.argv[1]=="commit"):
-<<<<<<< HEAD
       try:
          f = open(archivo)
          lectura = f.read()    
@@ -44,9 +43,9 @@ elif(len(sys.argv)==5):
 	     exit()
 	
 def error(a,o):
-	if (o==0):
-		print ("Debe dar el path completo del archivo {0} | Debe existir").format(a)
-		exit()
+    if (o==0):
+      print ("Debe dar el path completo del archivo {0} | Debe existir").format(a)
+      exit()
  
 			
     
