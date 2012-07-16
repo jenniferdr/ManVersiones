@@ -6,6 +6,7 @@ from peticion import Peticion
 import fcntl
 import struct
 from Tools import *
+import pickle
 
 # funcion para encontrar el ip de mi maquina
 # 
@@ -18,14 +19,13 @@ def get_ip_address(ifname):
     )[20:24])
 
 
-def receiveFile(my_socket):
-    for x in range(1,4):
+def receiveData(my_socket):
        connection_socket,addr = my_socket.accept()  #Acepta la proxima conexion 
        buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
        connection_socket.sendall('ACK')             #Envia un Ack
        data = connection_socket.recv(buffsize)      #Lee la informacion
        connection_socket.sendall('ACK')             #Envia un ack
-       print(data)
+       return(data)
 
 
 def main():
@@ -62,7 +62,12 @@ def main():
 	my_socket.bind(('',int(sys.argv[2]))) #Se liga a todas las interfaces disponibles y al puerto especificado
 	my_socket.listen(5) #Escucha por conexione en el socket
 	lista = Info_de_servers(sys.argv[3],sys.argv[4])
-		
+	table = {}
+	####
+	##Cambiar!!!!
+	k=4
+	##
+	
 	while 1:
 		connection_socket,addr = my_socket.accept() #Acepta la proxima conexion 
 		buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
@@ -80,55 +85,71 @@ def main():
 				soyCoordinador = False
 				print('ya no creo que sea coordinador')
 		elif data == 'COORDINADOR':
-			if soyCoordinador:					
+			if soyCoordinador:
 				switch.avisar((sys.argv[5],sys.argv[2]),sys.argv[3],sys.argv[4])
 		elif data == 'COMMIT':
-			receiveFile(my_socket)
-			
-			connection_socket.close()
-	my_socket.close()
-
-	print("Esta levantado el servidor {0}".format(sys.argv[1]))
-   	
-if __name__=="__main__":
-    main()
-
-
-
-
-	 #luego 
-	 
-	# si es commit recorro la tabla y veo cual fue la ultima version del archivo y que servidores tienen menos carga
-					# Balanceo
-					# for a in tabla
+			nombre = receiveData(my_socket)
+			data = receiveData(my_socket)
+			version = receiveData(my_socket)
+			my_file = open('pruebas/{0}'.format(nombre),'wb')
+			my_file.write(data)
+			my_file.close()
+			versionMayor=0
+			menores=[]
+			for ip in table.keys():
+				
+				if len(menores)<k:
+					menores.append(ip)
+				else:
+				for ipstent in menores:
+					if len(table[ip])< len(table[iptent]):
+						menores.remove(iptent)
+						menores.append(ip)
+						break
+				for tupla in tabla[ip]:
+					if tupla[0]== nombre:
+						if tupla[1]> versionMayor:
+							versionMayor= tupla[1]
+			pickle.dump(menores , open("listaIp", "wb",2))
+			# enviar menores
+			# enviar archivo multicast data nombre archivo y version +1
+			# recibir el AKC del resolverdor si todo salio bien 
+			for ip in menores:
+				tabla[ip].append((nombre, versionMayor+1))
 					
-					#	len(tabla[a][1]))
-					#
-	# copio la tabla imaginaria del unico grupo1 en el resolverdor
-	# mando un multicast a los n servidores que le corresponde al grupo 1
-	# cuando se complete el commit 
-	# llenar tabla
-	# Hago pickle de la tabla para poner en un archivo
-	# Cada vez que llegue una peticion debo duplicar el archivo de la tabla en todos los demas 
-	# mando un hecho al switch cliente
-	
-	# Si es Update
-	# if tengo version 
-			# Busco el archivo y su version 
-	# else
-	# recorro la tabla de archivos y agarro al primero que tenga el archivo y la version mayor, 
-	# si no contesta pues busco al siguiente y marco a trabajador como muerto
-	# mando el archivo al switch - cliente
+					
+			pickle.dump( tabla, open( "tablaGenral", "wb",2 ) )		
+			### ENVIAR EL ARCHIVO A TODOS
+			#TablaEnvio = pickle.load( open( "tablaGenral", "rb",2 ) )
+		elif data == 'UPDATE' or data=='CHECKOUT':
+			if version>0:
+				for ip in tabla.keys():
+					for tupla in tabla[ip]:
+						if (tupla[0]= nombre and tupla[1]==version):
+							# enviar al grupo => "ip" nombre + version			
+			elif :
+				for ip in table.keys():
+					for tupla in tabla[ip]:
+						if tupla[0]== nombre:
+							if tupla[1]> versionMayor:
+								versionMayor= tupla[1]
+								grupo=ip
+				# enviar grupo 
+				# enviar al grupo "ip" nombre + version		
 	
 	# si es Checkout
 	# busco en la tabla el archivo el archivo con la version mayor  y se lo mando a Switch-cliente
 	# si el primero no me responde , el siguiente y lo marco como muerto 
-	
-	
+
 	# si no soy coordinador 
 	
 	# si es commit guardo el archivo
 	# si es update o checkout mando el archivo
+			
+
+		connection_socket.close()
+	my_socket.close()
+
 
 
 
