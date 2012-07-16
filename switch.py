@@ -29,12 +29,13 @@ class Switch(object):
 		time.sleep(7)
 		multicast(ip_resolvedor,puerto_resolvedor,"COORDINADOR","0")
 
-	def avisar(self,id,res_add,res_port):
+	def avisar(self,ipp,res_add,res_port):
 		if not self.gotCoordinator:
-			self.gorCoordinator = True
-			self.coordinador= id
 			#SE ENTERA AQUI DE QUIEN ES EL COORDINADOR, CON EL PARAMETRO id
 			print('Felicitacion a {0} por ser el nuevo coordinador'.format(id))
+			self.gotCoordinator = True
+			self.coordinador = ipp
+			print('Felicitacion a {0} por ser el nuevo coordinador'.format(ipp))
 		else:
 			elegir_coordinador(res_add,res_port)
 		
@@ -48,7 +49,10 @@ class Switch(object):
 		print("Request: {0} {1} {2} {3}".format(self.tipoP,self.archivo,self.version, self.archi))
 
 		if(self.tipoP == "commit"):
-			print("Debo hacer commit")
+			MensajeAServidor(self.coordinador[0],self.coordinador[1],'COMMIT')	
+			MensajeAServidor(self.coordinador[0],self.coordinador[1],self.archivo)
+			MensajeAServidor(self.coordinador[0],self.coordinador[1],self.archi)
+			MensajeAServidor(self.coordinador[0],self.coordinador[1],self.version)
 		elif(self.tipoP == "checkout"):
 			print("Debo hacer update")
 		elif(self.tipoP == "update"):
