@@ -18,6 +18,16 @@ def get_ip_address(ifname):
     )[20:24])
 
 
+def receiveFile(my_socket):
+	for x in range(1,4):
+		connection_socket,addr = my_socket.accept() #Acepta la proxima conexion 
+		buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
+		connection_socket.sendall('ACK') #Envia un Ack
+		data = connection_socket.recv(buffsize) #Lee la informacion
+		connection_socket.sendall('ACK') #Envia un ack
+		print(data)
+
+
 def main():
 
 	if (len(sys.argv)!= 8):
@@ -64,7 +74,9 @@ def main():
 				print('ya no creo que sea coordinador')
 		elif data == 'COORDINADOR':
 			if soyCoordinador:
-				switch.avisar(sys.argv[1],sys.argv[3],sys.argv[4])
+				switch.avisar((sys.argv[5],sys.argv[2]),sys.argv[3],sys.argv[4])
+		elif data == 'COMMIT':
+			receiveFile(my_socket)
 		connection_socket.close()
 	my_socket.close()
 

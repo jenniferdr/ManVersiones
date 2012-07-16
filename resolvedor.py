@@ -48,6 +48,18 @@ class requestHandler(SocketServer.BaseRequestHandler):
 				info = self.server.servers[server]
 				print(info)
 				MensajeAServidor(info[0],info[1],mensaje)
+		elif data == 'IP-REQUEST':
+			print('CHEC')
+			self.request.sendall('ACK')#Recibe Ack
+			self.request.recv(1024)#Recibe Ack
+			for id in self.server.servers:
+				self.request.sendall(self.server.servers[id][0])
+				self.request.recv(1024)#Recibe Ack
+				self.request.sendall(self.server.servers[id][1])
+				self.request.recv(1024)#Recibe Ack
+			self.request.sendall('END')
+			self.request.recv(1024)#Recibe Ack
+
 		else:
 			print('')
 
@@ -75,19 +87,20 @@ class Resolvedor(object):
 	self.localhost =  socket.gethostname()
 	self.localIp = socket.gethostbyname(self.localhost)
         self.listaIp= []
+        print("Si tengo listaIp {0}".format(self.listaIp))
         self.num_reg= 0
 
     def guardalos(self, tipoP,nombreArch,version,archi):
 	 culo = tipoP
 	 t=archi
-	 
 	 print ('holas {0} '.format(t))
 	 print("Estoy en resolvedor {0}.".format(culo))
 
     def agregarServidor(self,ip):
-        self.listaIp.append(ip)
-        self.num_reg= self.num_reg +1
+        
+        num_reg= num_reg +1
         print("Se ha registrado el servidor: {0}".format(ip))
+        print("{0}".format(self.listaIp))
         
         
 def main():

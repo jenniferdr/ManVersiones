@@ -20,7 +20,7 @@ if(len(sys.argv) == 4):
       try:
          f = open(archivo)
          lectura = f.read()    
-         pet1 = Peticion(tipoP,archivo,1,lectura)
+         pet1 = Peticion(tipoP,archivo,'1',lectura)
          pet1.enviarRequest(switch)
       except IOError:
          print 'No existe', archivo
