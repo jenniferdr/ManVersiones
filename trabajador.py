@@ -126,6 +126,7 @@ def main():
 					
 				switch.avisar((sys.argv[5],sys.argv[2]),sys.argv[3],sys.argv[4])
 		elif data == 'COMMIT':
+			print 'hola'
 			receiveFile(my_socket)
 			connection_socket.close()
 	my_socket.close()

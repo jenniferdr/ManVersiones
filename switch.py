@@ -28,10 +28,9 @@ class Switch(object):
      time.sleep(7)
      multicast(ip_resolvedor,puerto_resolvedor,"COORDINADOR","0")
 
-	def avisar(self,ipp,res_add,res_port):
+   def avisar(self,ipp,res_add,res_port):
 		if not self.gotCoordinator:
-			#SE ENTERA AQUI DE QUIEN ES EL COORDINADOR, CON EL PARAMETRO id
-			print('Felicitacion a {0} por ser el nuevo coordinador'.format(id))
+			#SE ENTERA AQUI DE QUIEN ES EL COORDINADOR, CON EL PARAMETRO ipp
 			self.gotCoordinator = True
 			self.coordinador = ipp
 			print('Felicitacion a {0} por ser el nuevo coordinador'.format(ipp))
