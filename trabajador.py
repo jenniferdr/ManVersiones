@@ -90,6 +90,10 @@ def main():
 			nombre = receiveData(my_socket)
 			data = receiveData(my_socket)
 			version = receiveData(my_socket)
+			#my_file = open('pruebas/{0}'.format(nombre),'wb')
+			#my_file.write(data)
+			#my_file.close()
+
 			versionMayor=0
 			menores=[]
 			for i in lista:
@@ -121,6 +125,7 @@ def main():
 			print(data)	
 			#pickle.dump( table, open( "tablaGenral", "wb",2 ) )
 			multicast(sys.argv[3],sys.argv[4],data,'0','MU/{0}/{1}'.format(nombre,'2'))
+
 			### ENVIAR EL ARCHIVO A TODOS
 			#TablaEnvio = pickle.load( open( "tablaGenral", "rb",2 ) )
 		elif 'U/' in data:
@@ -168,9 +173,7 @@ def main():
 
 
 if __name__=="__main__":
-    main()
-
-
+   main()
 
 
 

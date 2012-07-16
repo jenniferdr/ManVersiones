@@ -52,7 +52,7 @@ def MensajeAServidor(ip_destino,port_destino,mensaje):
 	if  b != 'ACK': #Se espera un ack por parte del resolvedor
 		print('AQUI SE ESPERABA UN ACK PERO TUVIMOS UN {0}'.format(b))
 		socket_resolvedor.sendall(str(buffsize))
-	socket_resolvedor.sendall(mensaje) #Se envia el mensaje
+	socket_resolvedor.sendall(str(mensaje)) #Se envia el mensaje
 	if  b != 'ACK': #Se espera un ack por parte del resolvedor
 		print('AQUI SE ESPERABA UN ACK PERO TUVIMOS UN {0}'.format(b))
 		socket_resolvedor.sendall(mensaje) 

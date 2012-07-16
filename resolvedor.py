@@ -29,6 +29,14 @@ class requestHandler(SocketServer.BaseRequestHandler):
         data = self.request.recv(1024).split('$')#lee datos del socket
         self.request.sendall('ACK')#envia ack
         self.server.servers[data[0]] = (data[1],data[2])#incluye datos del servidor
+        if (len(self.server.servers)<self.server.numMaq):
+           print ('Esperando trabajadores...')
+           #self.server.numMaq= self.server.numMaq +1
+           print (self.server.numMaq)
+           print (self.server.servers)
+        else:
+           EligeCoordinador('127.0.0.1','5001','127.0.0.1','5000')
+        
 
         if data[0] not in self.server.groups['0']:
            #Evita duplicados en el diccionario de servidores
@@ -114,11 +122,13 @@ class requestHandler(SocketServer.BaseRequestHandler):
 
 #Implementacion de servidor multihilo
 class Server(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
-	def __init__(self, server_address, RequestHandlerClass):
+	def __init__(self, server_address, RequestHandlerClass,k,numMaq):
 		SocketServer.TCPServer.__init__(self, server_address, RequestHandlerClass)
 		self.servers = {}
 		self.groups = {'0':[]}
 		self.sockets = []
+                self.k=k
+                self.numMaq= numMaq 
 		
 
 def close_sockets(server):
@@ -155,6 +165,12 @@ def main():
         print("Sintaxis incorrecta: <numero_maquinas> <numero_tolerancia> <puerto>")
         exit()
 
+    if (int(sys.argv[1])< int(sys.argv[2])+1):
+       print("Con ese numero de maquinas no se puede cumplir la tolerancia especificada")
+       exit()
+    # Validar !!! 
+    k= int(sys.argv[2])
+    numMaq= int(sys.argv[1])
         
     #-------------version Pyro
     #numMaq= sys.argv[1]
@@ -183,7 +199,7 @@ def main():
         
     #----------Version Sockets
     
-    serv = Server(('',int(sys.argv[3])),requestHandler)
+    serv = Server(('',int(sys.argv[3])),requestHandler,k,numMaq)
     s_thread = threading.Thread(target=serv.serve_forever)
     s_thread.demon = True
     s_thread.start()
