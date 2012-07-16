@@ -14,7 +14,7 @@ archivo = sys.argv[2]
 ip= sys.argv[3]
 
 sys.excepthook=Pyro4.util.excepthook
-switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':5000')
+switch=Pyro4.Proxy('PYRO:example.switch@'+ip+':5001')
 #switch.setTimeout(15)    
 if(len(sys.argv) == 4):
     if(sys.argv[1]=="commit"):
@@ -43,8 +43,8 @@ elif(len(sys.argv)==5):
             exit()
 
         if version<=0:
-             print("La version debe ser un numero mayor a 1")
-             exit()
+            print("La version debe ser un numero mayor a 1")
+            exit()
 
         pet1 = Peticion(tipoP,archivo,version,'')
         pet1.enviarRequest(switch)
@@ -57,7 +57,3 @@ def error(a,o):
       print ("Debe dar el path completo del archivo {0} | Debe existir").format(a)
       exit()
  
-			
-    
-	
-	

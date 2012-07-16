@@ -36,7 +36,6 @@ def main():
 	"""
 	yo = trabajador(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
 	"""
-	p
 
 	soyCoordinador = False
 	switch=Pyro4.Proxy('PYRO:example.switch@{0}:{1}'.format(sys.argv[6],sys.argv[7]))
@@ -91,9 +90,9 @@ def main():
 			nombre = receiveData(my_socket)
 			data = receiveData(my_socket)
 			version = receiveData(my_socket)
-			my_file = open('pruebas/{0}'.format(nombre),'wb')
-			my_file.write(data)
-			my_file.close()
+			#my_file = open('pruebas/{0}'.format(nombre),'wb')
+			#my_file.write(data)
+			#my_file.close()
 			versionMayor=0
 			menores=[]
 			for ip in table.keys():
@@ -115,10 +114,10 @@ def main():
 			# enviar archivo multicast data nombre archivo y version +1
 			# recibir el AKC del resolverdor si todo salio bien 
 			for ip in menores:
-				tabla[ip].append((nombre, versionMayor+1))
+				table[ip].append((nombre, versionMayor+1))
 					
 					
-			pickle.dump( tabla, open( "tablaGenral", "wb",2 ) )		
+			pickle.dump( table, open( "tablaGenral", "wb",2 ) )		
 			### ENVIAR EL ARCHIVO A TODOS
 			#TablaEnvio = pickle.load( open( "tablaGenral", "rb",2 ) )
 		elif data == 'UPDATE' or data=='CHECKOUT':
@@ -152,7 +151,8 @@ def main():
 	my_socket.close()
 
 
-
+if __name__=="__main__":
+   main()
 
 
 
