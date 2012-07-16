@@ -15,54 +15,56 @@ from Tools import *
 #Handler del servidor
 class requestHandler(SocketServer.BaseRequestHandler):
 
-	#def __init__(self, reques, client_address, server)
+   #def __init__(self, reques, client_address, server)
 
-	def handle(self):
+   def handle(self):
 		
-		data = self.request.recv(1024) #Lee la informacion sel socket a la variable 'data'
-		if data == 'REGISTRO':		
-			# if el numero de registros es igual al numero de entrada me salgo
-			#Caso de registro de nuevo servidor
-			self.request.sendall('ACK')#Envia ack
-			data = self.request.recv(1024).split('$')#lee datos del socket
-			self.request.sendall('ACK')#envia ack
-			self.server.servers[data[0]] = (data[1],data[2])#incluye los datos del servidor
-			if data[0] not in self.server.groups['0']:#Evita duplicados en el diccionario de servidores
-				self.server.groups['0'].append(data[0])
-			print("Se registro correctamente el servidor {0} con los datos {1}".format(data[0],self.server.servers[data[0]]))
-			print(self.server.groups['0'])
-		elif data == 'MULTICAST':
-			#Se envia un multicast
-			#print('LLEGO UN MULTICAST AL RESOLVEDOR')
-			self.request.sendall('ACK')#Envia ack
-			grupo = self.request.recv(1024)#obtiene el grupo al que esta dirigido
-			#print('LLego para el grupo {0}'.format(grupo))
-			self.request.sendall('ACK')#manda ack
-			buffsize = self.request.recv(1024)#obtiene el tamano del mensaje
-			#print('LLego con un mensaje de buffsize {0}'.format(buffsize))
-			self.request.sendall('ACK')#manda ack
-			mensaje = self.request.recv(int(buffsize))#lee mensaje de socket
-			#print('LLego con el mensaje {0}'.format(mensaje))
-			self.request.sendall('ACK')#manda ack
-			#manda los mensajes
-			for server in self.server.groups[grupo]:
-				info = self.server.servers[server]
-				print(info)
-				MensajeAServidor(info[0],info[1],mensaje)
-		elif data == 'IP-REQUEST':
-			print('CHEC')
-			self.request.sendall('ACK')#Recibe Ack
-			self.request.recv(1024)#Recibe Ack
-			for id in self.server.servers:
-				self.request.sendall(self.server.servers[id][0])
-				self.request.recv(1024)#Recibe Ack
-				self.request.sendall(self.server.servers[id][1])
-				self.request.recv(1024)#Recibe Ack
-			self.request.sendall('END')
-			self.request.recv(1024)#Recibe Ack
+     data = self.request.recv(1024)#Lee la informacion sel socket a la variable 'data'
+     if data == 'REGISTRO':		
+        #Caso de registro de nuevo servidor
+        self.request.sendall('ACK')#Envia ack
+        data = self.request.recv(1024).split('$')#lee datos del socket
+        self.request.sendall('ACK')#envia ack
+        self.server.servers[data[0]] = (data[1],data[2])#incluye datos del servidor
 
-		else:
-			print('')
+        if data[0] not in self.server.groups['0']:
+           #Evita duplicados en el diccionario de servidores
+           self.server.groups['0'].append(data[0])
+           #print("Se registro correctamente el servidor {0}
+           #con los datos {1}".format(data[0],self.server.servers[data[0]]))
+			#print(self.server.groups['0'])
+     elif data == 'MULTICAST':
+        #Se envia un multicast
+        #print('LLEGO UN MULTICAST AL RESOLVEDOR')
+        self.request.sendall('ACK')#Envia ack
+        grupo = self.request.recv(1024)#obtiene el grupo al que esta dirigido
+        #print('LLego para el grupo {0}'.format(grupo))
+        self.request.sendall('ACK')#manda ack
+        buffsize = self.request.recv(1024)#obtiene el tamano del mensaje
+        #print('LLego con un mensaje de buffsize {0}'.format(buffsize))
+        self.request.sendall('ACK')#manda ack
+        mensaje = self.request.recv(int(buffsize))#lee mensaje de socket
+        #print('LLego con el mensaje {0}'.format(mensaje))
+        self.request.sendall('ACK')#manda ack
+        #manda los mensajes
+        for server in self.server.groups[grupo]:
+            info = self.server.servers[server]
+            print(info)
+            MensajeAServidor(info[0],info[1],mensaje)
+     elif data == 'IP-REQUEST':
+        print('CHEC')
+        self.request.sendall('ACK')#Recibe Ack
+        self.request.recv(1024)#Recibe Ack
+        for id in self.server.servers:
+            self.request.sendall(self.server.servers[id][0])
+            self.request.recv(1024)#Recibe Ack
+            self.request.sendall(self.server.servers[id][1])
+            self.request.recv(1024)#Recibe Ack
+            self.request.sendall('END')
+            self.request.recv(1024)#Recibe Ack
+
+     else:
+         print('')
 
 #Implementacion de servidor multihilo
 class Server(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
