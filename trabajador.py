@@ -92,6 +92,8 @@ def main():
 			version = receiveData(my_socket)
 			versionMayor=0
 			menores=[]
+			for i in lista:
+				table[i]=[]
 			for ip in table.keys():
 				
 				if len(menores)<k:
@@ -106,23 +108,26 @@ def main():
 						if tupla[0]== nombre:
 							if tupla[1]> versionMayor:
 								versionMayor= tupla[1]
-			#pickle.dump(menores , open("listaIp", "wb",2))
+			menores = ['127.0.0.1']
+			pickle.dump(menores , open("listaIp", "wb"))
+			archivo = open('listaIp') 
+            		UploadAResolvedor(sys.argv[3],sys.argv[4],'Table-----v/0',archivo.read())
 			# enviar menores
 			# enviar archivo multicast data nombre archivo y version +1
 			# recibir el AKC del resolverdor si todo salio bien 
-			for ip in menores:
-				table[ip].append((nombre, versionMayor+1))
-					
+			#for ip in menores:
+			#	table[ip].append((nombre, versionMayor+1))
+			print('COSSSSSO')		
 			print(data)	
 			#pickle.dump( table, open( "tablaGenral", "wb",2 ) )
 			multicast(sys.argv[3],sys.argv[4],data,'0','MU/{0}/{1}'.format(nombre,'2'))
 			### ENVIAR EL ARCHIVO A TODOS
 			#TablaEnvio = pickle.load( open( "tablaGenral", "rb",2 ) )
 		elif 'U/' in data:
-			print(data)
 			nombre = '{0}.{1}'.format(data.split('/')[1],sys.argv[1])
 			version = data.split('/')[2]
-			print(version)	
+			if version == None:
+				Version = '0'	
 			buffsize = int(connection_socket.recv(1024)) #Lee el tamano de la informacion
 			connection_socket.sendall('ACK') #Envia un Ack
 			data = connection_socket.recv(buffsize) #Lee la informacion

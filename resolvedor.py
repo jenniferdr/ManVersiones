@@ -6,6 +6,7 @@ import socket
 import atexit
 import threading
 import SocketServer
+import pickle
 from Tools import *
 
 
@@ -84,6 +85,29 @@ class requestHandler(SocketServer.BaseRequestHandler):
             self.request.recv(1024)#Recibe Ack
         self.request.sendall('END')
         self.request.recv(1024)#Recibe Ack
+     elif 'U/' in data:
+	
+	self.request.sendall('ACK') #Envia un Ack
+	print('-------------------_>>>>{0}'.format(data))
+	nombre = '{0}.{1}'.format(data.split('/')[1],sys.argv[1])
+
+	version = data.split('/')[2]
+
+	buffsize = int(self.request.recv(1024)) #Lee el tamano de la informacion
+
+	self.request.sendall('ACK') #Envia un Ack
+
+	fil = self.request.recv(buffsize) #Lee la informacion
+	self.request.sendall('ACK') #Envia un acki
+
+	my_file = open('pruebas/{0}'.format(nombre),'rwb')
+
+	variable = pickle.load(my_file)
+	print('-----------------')
+	print(variable)
+	my_file.write(fil)
+
+	my_file.close()
 
      else:
          print('')
